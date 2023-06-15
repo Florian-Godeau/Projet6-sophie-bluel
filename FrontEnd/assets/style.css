@@ -93,9 +93,17 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	text-decoration: none;
+	color: black;
 }
 
-li:hover {
+nav a {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+}
+
+nav a:hover {
 	color: #B1663C;
 }
 #introduction {
