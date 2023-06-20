@@ -111,6 +111,7 @@ nav a {
 nav a:hover {
 	color: #B1663C;
 }
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -136,7 +137,7 @@ nav a:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+	margin-bottom: 51px;
 }
 .gallery {
 	width: 100%;
@@ -215,3 +216,33 @@ footer nav ul {
 	margin: 2em;
 }
 
+.filter-buttons {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 51px;
+	gap: 10px;
+}
+
+.filter {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 1.2em;
+	height: 37px;
+	color: #1D6154;
+	background-color: white;
+	border-radius: 60px;
+	text-align: center;
+	cursor: pointer;
+	border-color: #1D6154;
+	padding: 0 20px;
+}
+
+.filter-buttons button:hover {
+	color: white;
+	background-color: #1D6154;
+}
+
+.filter-selected {
+	color: white;
+	background-color: #1D6154;
+}
