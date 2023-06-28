@@ -112,6 +112,16 @@ nav a:hover {
 	color: #B1663C;
 }
 
+.login-logout {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+}
+
+.login-logout:hover {
+	color: #B1663C;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -206,8 +216,8 @@ input[type="submit"]{
 	cursor: pointer;
 }
 
-#log-footer {
-	
+.error-message {
+  color: red;
 }
 
 footer nav ul {

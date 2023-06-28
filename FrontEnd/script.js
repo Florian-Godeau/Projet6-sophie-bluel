@@ -9,7 +9,7 @@ fetch('http://localhost:5678/api/works')
 
 function displayProjects(projects) {
     const gallery = document.querySelector('.gallery');
-    gallery.innerHTML = ''; // Clear the gallery
+    gallery.innerHTML = '';
 
     projects.forEach(project => {
         const figure = document.createElement('figure');
@@ -29,10 +29,9 @@ function displayProjects(projects) {
 
     if (window.location.hash === '#contact') {
         setTimeout(function() {
-            // Faire défiler jusqu'à l'élément après que le contenu ait été généré.
             const contactElement = document.getElementById('contact');
             contactElement.scrollIntoView();
-        }, 100); // Définissez le délai en fonction de votre besoin
+        }, 100);
     }
 }
 
@@ -43,7 +42,7 @@ fetch('http://localhost:5678/api/categories')
 
         const allButton = document.createElement('button');
         allButton.textContent = "Tous";
-        allButton.classList.add('filter-selected'); // Ajouter 'filter-selected' à 'Tous' par défaut
+        allButton.classList.add('filter-selected');
         allButton.classList.add('filter');
         allButton.addEventListener('click', () => filterProjects(null, allButton));
         filterButtons.appendChild(allButton);
@@ -60,7 +59,7 @@ fetch('http://localhost:5678/api/categories')
 function filterProjects(categoryId, selectedButton) {
     const filteredProjects = !categoryId ? allProjects : allProjects.filter(project => project.categoryId === categoryId);
     displayProjects(filteredProjects);
-    setSelectedFilter(selectedButton); // Ajoutez cette ligne
+    setSelectedFilter(selectedButton);
 }
 
 function setSelectedFilter(selectedButton) {
