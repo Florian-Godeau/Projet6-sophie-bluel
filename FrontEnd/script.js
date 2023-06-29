@@ -69,3 +69,27 @@ function setSelectedFilter(selectedButton) {
     });
     selectedButton.classList.add('filter-selected');
 }
+
+function logged() {
+    const edit = document.querySelector(".edit");
+    const filterButtons = document.querySelector('.filter-buttons');
+    const header = document.querySelector("header");
+    const editButtons = document.querySelectorAll(".edit-button");
+
+    if (localStorage.getItem("token")) {
+        filterButtons.style.display = "none";
+        edit.style.display = "flex";
+        header.style.margin = "97px 0";
+        editButtons.forEach(button => {
+            button.style.display = "flex";
+        });
+    }
+}
+
+async function indexPage() {
+    logged();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    indexPage();
+});
