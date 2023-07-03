@@ -3,15 +3,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const modal = document.querySelector(".modal");
 
     // Obtenir tous les boutons qui ouvrent la fenêtre modale
-    const buttonProject = document.querySelector(".edit-buttonProject");
+    const buttonProject = document.querySelectorAll(".open-modal");
 
     // Obtenir l'élément <i> qui ferme la fenêtre modale
     const closeModalElement = document.querySelector(".close-modal");
 
     // Lorsqu'on clique sur un bouton, ouvrir la fenêtre modale 
-    buttonProject.onclick = function() {
+    buttonProject.forEach(function(button) {
+        button.onclick = function() {
         modal.style.display = "flex";
-    }
+        }
+    });
     
 
     // Lorsqu'on clique sur <i> (x), fermer la fenêtre modale

@@ -86,10 +86,6 @@ function logged() {
     }
 }
 
-async function indexPage() {
-    logged();
-}
-
 document.addEventListener("DOMContentLoaded", function() {
-    indexPage();
+    logged();
 });

@@ -98,6 +98,11 @@ nav ul {
 	list-style-type: none;
 
 }
+
+.insta:hover {
+	opacity: 0.5;
+}
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
@@ -294,10 +299,17 @@ footer nav ul {
 	align-items: center;
 	background-color: white;
 	border-radius: 60px;
+	border: 2px solid black;
 	color: black;
 	font-family: 'Work Sans';
 	font-size: 14px;
 	cursor: pointer;
+}
+
+.edit p:hover {
+	background-color: black;
+	color: white;
+	border-color: white;
 }
 
 .edit-button {
@@ -309,11 +321,14 @@ footer nav ul {
 	cursor: pointer;
 	display: none;
 }
+
+.edit-button:hover {
+	opacity: 0.5;
+}
+
 .edit-buttonPhoto {
-	margin: auto;
-	width: 80%;
-	padding-top: 13px;
-	padding-left: 0;
+	margin-top: 13px;
+	margin-left: 51px;
 }
 .projets-edit {
 	display: flex;
