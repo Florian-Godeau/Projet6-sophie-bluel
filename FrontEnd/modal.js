@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fileInput.type = "file";
     fileInput.accept = "image/png, image/jpeg";
     fileInput.style.display = "none";
+    fileInput.setAttribute('id', 'inputPhoto');
     modalPicture.appendChild(fileInput);
 
     // Ajouter un message d'erreur
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Lorsqu'un fichier est choisi
-fileInput.addEventListener("change", function() {
+    fileInput.addEventListener("change", function() {
     const file = this.files[0];
 
     // Vérifier la taille et le type du fichier
@@ -78,7 +79,7 @@ fileInput.addEventListener("change", function() {
     // Cacher le bouton et le texte des conditions
     addBtnPhoto.style.display = "none";
     addCondition.style.display = "none";
-});
+    });
 
     // Créer le formulaire pour le titre de la photo
     const modalForm = document.createElement("form");
@@ -177,6 +178,7 @@ fileInput.addEventListener("change", function() {
         validateButton.style.backgroundColor = '';
         validateButton.style.color = '';
         validateButton.style.cursor = '';
+        validateButton.addEventListener("click", uploadPhoto);
     }
     }
 
@@ -228,98 +230,172 @@ fileInput.addEventListener("change", function() {
         modalForm.style.display = "none";
         validateButton.style.display = "none";
         addButton.style.display = "block";
-        
+
         // Supprimer l'image sélectionnée
         if (img) {
-        img.parentNode.removeChild(img);
-        
-        // Rendre l'élément <i> visible à nouveau
-        imageAddPhoto.style.display = "block";
-    }
-        
-        // Effacer le texte du titre
-        titleInput.value = '';
-        
-        // Remettre la catégorie à null
-        categorySelect.value = 'null';
-        
-        // Rendre le bouton d'ajout de photo et le texte des conditions visibles à nouveau
-        addBtnPhoto.style.display = "inline-block";  // or "block" depending on your styling needs
-        addCondition.style.display = "block";
-        
-        // Réinitialiser la valeur de fileInput
-        fileInput.value = '';
-        
-        // Mettre à jour l'état
-        isImageSelected = false;
-        isTitleEntered = false;
-        isCategorySelected = false;
-        checkConditions();
-    }
-    
-    function closeModal() {
-        modal.style.display = "none";
-        switchToGalleryMode();
-    }
-    
-    addButton.addEventListener("click", switchToAddMode);
-    arrowLeft.addEventListener("click", switchToGalleryMode);
-    closeModalElement.onclick = closeModal;
-    
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            closeModal();
+            img.parentNode.removeChild(img);
+            
+            // Rendre l'élément <i> visible à nouveau
+            imageAddPhoto.style.display = "block";
+            }
+            
+            // Effacer le texte du titre
+            titleInput.value = '';
+            
+            // Remettre la catégorie à null
+            categorySelect.value = 'null';
+            
+            // Rendre le bouton d'ajout de photo et le texte des conditions visibles à nouveau
+            addBtnPhoto.style.display = "inline-block";  // or "block" depending on your styling needs
+            addCondition.style.display = "block";
+            
+            // Réinitialiser la valeur de fileInput
+            fileInput.value = '';
+            
+            // Mettre à jour l'état
+            isImageSelected = false;
+            isTitleEntered = false;
+            isCategorySelected = false;
+            checkConditions();
         }
+        
+        function closeModal() {
+            modal.style.display = "none";
+            switchToGalleryMode();
+        }
+        
+        addButton.addEventListener("click", switchToAddMode);
+        arrowLeft.addEventListener("click", switchToGalleryMode);
+        closeModalElement.onclick = closeModal;
+        
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    
+    
+    function displayProjectsInModal(projects, gallery) {
+        gallery.innerHTML = '';
+    
+        projects.forEach((project, index) => {
+            const figure = document.createElement('figure');
+            figure.draggable = true;
+            figure.dataset.id = project.id;
+            figure.classList.add('draggable');
+    
+            figure.addEventListener('dragstart', handleDragStart);
+            figure.addEventListener('dragover', handleDragOver);
+            figure.addEventListener('drop', handleDrop);
+    
+            const img = document.createElement('img');
+            img.src = project.imageUrl;
+            img.alt = project.title;
+            img.classList.add('modal-galery-img');
+    
+            const iconeElement = document.createElement("i");
+            iconeElement.classList.add("fa-regular", "fa-trash-can", "trash-can");
+    
+            const hoverIconeElement = document.createElement("i");
+            hoverIconeElement.classList.add("fa-solid", "fa-arrows-up-down-left-right", "arrows");
+    
+            const figcaption = document.createElement('figcaption');
+            figcaption.textContent = "éditer";
+    
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+            figure.appendChild(iconeElement);
+            figure.appendChild(hoverIconeElement);
+    
+            gallery.appendChild(figure);
+        });
+    
+        const deleteIcons = gallery.querySelectorAll(".trash-can");
+        deleteIcons.forEach(trashCan => {
+            const figure = trashCan.parentNode;
+            const photoId = figure.dataset.id;
+            trashCan.value = photoId;
+        });
+    }
+    
+    let draggedItem = null;
+    
+    function handleDragStart(e) {
+        draggedItem = this;
+    }
+    
+    function handleDragOver(e) {
+        e.preventDefault();
+    }
+    
+    function handleDrop(e) {
+        const gallery = document.querySelector(".modal-galery");
+        gallery.insertBefore(draggedItem, this.nextSibling);
+    }
+
+    function getCategoryId(categoryName) {
+        const categories = [
+            {
+                "id": 1,
+                "name": "Objets"
+            },
+            {
+                "id": 2,
+                "name": "Appartements"
+            },
+            {
+                "id": 3,
+                "name": "Hotels & restaurants"
+            }
+        ];
+    
+        const category = categories.find(cat => cat.name === categoryName);
+        return category ? category.id : null;
+    }
+    
+    function uploadPhoto() {
+        const file = document.getElementById("inputPhoto").files[0];
+        const title = document.getElementById("photoTitle").value;
+        const category = document.getElementById("photoCategory").value;
+        const categoryId = getCategoryId(category);
+        
+    
+        if (!categoryId) {
+            alert("Catégorie invalide");
+            return;
+        }
+    
+        let formData = new FormData();
+        formData.append("image", file);
+        formData.append("title", title);
+        formData.append("category", categoryId);
+    
+        fetch("http://localhost:5678/api/works/", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: formData
+        })
+            .then(response => {
+                if (response.status === 201) {
+                    return response.json();
+                } else if (response.status === 400) {
+                    throw new Error("Requête incorrecte");
+                } else if (response.status === 401) {
+                    throw new Error("Non autorisé");
+                } else {
+                    throw new Error("Erreur inattendue");
+                }
+            })
+            .then(data => {
+                // Utilisez les données renvoyées par l'API si nécessaire
+                console.log(data);
+                alert("Photo ajoutée avec succès !");
+            })
+            .catch(error => {
+                alert("Une erreur est survenue lors de l'ajout de la photo : " + error.message);
+                console.error(error);
+            });
     }
 });
-
-function displayProjectsInModal(projects, gallery) {
-    gallery.innerHTML = '';
-
-    projects.forEach((project, index) => {
-        const figure = document.createElement('figure');
-        figure.draggable = true;
-        figure.dataset.id = index;
-        figure.classList.add('draggable');
-
-        figure.addEventListener('dragstart', handleDragStart);
-        figure.addEventListener('dragover', handleDragOver);
-        figure.addEventListener('drop', handleDrop);
-
-        const img = document.createElement('img');
-        img.src = project.imageUrl;
-        img.alt = project.title;
-        img.classList.add('modal-galery-img');
-
-        const iconeElement = document.createElement("i");
-        iconeElement.classList.add("fa-regular", "fa-trash-can", "trash-can");
-
-        const hoverIconeElement = document.createElement("i");
-        hoverIconeElement.classList.add("fa-solid", "fa-arrows-up-down-left-right", "arrows");
-
-        const figcaption = document.createElement('figcaption');
-        figcaption.textContent = "éditer";
-
-        figure.appendChild(img);
-        figure.appendChild(figcaption);
-        figure.appendChild(iconeElement);
-        figure.appendChild(hoverIconeElement);
-
-        gallery.appendChild(figure);
-    });
-}
-
-let draggedItem = null;
-
-function handleDragStart(e) {
-    draggedItem = this;
-}
-
-function handleDragOver(e) {
-    e.preventDefault();
-}
-
-function handleDrop(e) {
-    const gallery = document.querySelector(".modal-galery");
-    gallery.insertBefore(draggedItem, this.nextSibling);
-}
