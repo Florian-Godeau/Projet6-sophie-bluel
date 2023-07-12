@@ -52,28 +52,33 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Lorsqu'un fichier est choisi
-    fileInput.addEventListener("change", function() {
-        const file = this.files[0];
+fileInput.addEventListener("change", function() {
+    const file = this.files[0];
 
-        // Vérifier la taille et le type du fichier
-        if (file.size > 4 * 1024 * 1024 || (file.type !== "image/png" && file.type !== "image/jpeg")) {
-            errorMessage.style.display = "block";
-            return;
-        } else {
-            errorMessage.style.display = "none";
-        }
+    // Vérifier la taille et le type du fichier
+    if (file.size > 4 * 1024 * 1024 || (file.type !== "image/png" && file.type !== "image/jpeg")) {
+        errorMessage.style.display = "block";
+        return;
+    } else {
+        errorMessage.style.display = "none";
+    }
 
-        // Créer une URL pour le fichier et remplacer l'élément <i> par un <img>
-        const url = URL.createObjectURL(file);
-        const img = document.createElement("img");
-        img.src = url;
-        img.classList.add("miniature-photo");
-        imageAddPhoto.replaceWith(img);
+    // Créer une URL pour le fichier
+    const url = URL.createObjectURL(file);
 
-        // Cacher le bouton et le texte des conditions
-        addBtnPhoto.style.display = "none";
-        addCondition.style.display = "none";
-    });
+    // Cacher l'élément <i>
+    imageAddPhoto.style.display = "none";
+
+    // Créer un nouvel élément <img> et l'insérer après le fileInput
+    const img = document.createElement("img");
+    img.src = url;
+    img.classList.add("miniature-photo");
+    fileInput.parentNode.insertBefore(img, fileInput.nextSibling);
+
+    // Cacher le bouton et le texte des conditions
+    addBtnPhoto.style.display = "none";
+    addCondition.style.display = "none";
+});
 
     // Créer le formulaire pour le titre de la photo
     const modalForm = document.createElement("form");
@@ -196,8 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Lorsqu'on clique sur le bouton d'ajout, modifier le titre, cacher la galerie et modifier la hauteur
-    addButton.addEventListener("click", function() {
+    function switchToAddMode() {
         const titleElement = document.querySelector("h3");
         titleElement.textContent = "Ajout photo";
         modalGallery.style.display = "none";
@@ -208,11 +212,13 @@ document.addEventListener("DOMContentLoaded", function() {
         modalForm.style.display = "flex";
         validateButton.style.display = "block";
         addButton.style.display = "none";
-    });
-
-    // Lorsqu'on clique sur arrow left, réinitialiser le modal
-    arrowLeft.addEventListener("click", function() {
+        addBtnPhoto.style.display = "block"; 
+        addCondition.style.display = "block";
+    }
+    
+    function switchToGalleryMode() {
         const titleElement = document.querySelector("h3");
+        const img = document.querySelector(".miniature-photo");
         titleElement.textContent = "Galerie photo";
         modalGallery.style.display = "flex";
         modalContent.style.height = "731px";
@@ -222,17 +228,47 @@ document.addEventListener("DOMContentLoaded", function() {
         modalForm.style.display = "none";
         validateButton.style.display = "none";
         addButton.style.display = "block";
-    });
-
-    // Lorsqu'on clique sur <i> (x), fermer la fenêtre modale
-    closeModalElement.onclick = function() {
-        modal.style.display = "none";
+        
+        // Supprimer l'image sélectionnée
+        if (img) {
+        img.parentNode.removeChild(img);
+        
+        // Rendre l'élément <i> visible à nouveau
+        imageAddPhoto.style.display = "block";
     }
-
-    // Lorsqu'on clique en dehors de la fenêtre modale, la fermer
+        
+        // Effacer le texte du titre
+        titleInput.value = '';
+        
+        // Remettre la catégorie à null
+        categorySelect.value = 'null';
+        
+        // Rendre le bouton d'ajout de photo et le texte des conditions visibles à nouveau
+        addBtnPhoto.style.display = "inline-block";  // or "block" depending on your styling needs
+        addCondition.style.display = "block";
+        
+        // Réinitialiser la valeur de fileInput
+        fileInput.value = '';
+        
+        // Mettre à jour l'état
+        isImageSelected = false;
+        isTitleEntered = false;
+        isCategorySelected = false;
+        checkConditions();
+    }
+    
+    function closeModal() {
+        modal.style.display = "none";
+        switchToGalleryMode();
+    }
+    
+    addButton.addEventListener("click", switchToAddMode);
+    arrowLeft.addEventListener("click", switchToGalleryMode);
+    closeModalElement.onclick = closeModal;
+    
     window.onclick = function(event) {
         if (event.target === modal) {
-            modal.style.display = "none";
+            closeModal();
         }
     }
 });
