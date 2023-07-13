@@ -389,8 +389,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             })
             .then(data => {
-                // Utilisez les données renvoyées par l'API si nécessaire
                 console.log(data);
+                switchToGalleryMode();
+                fetch('http://localhost:5678/api/works')
+                    .then(response => response.json())
+                    .then(data => {
+                        displayProjectsInModal(data, modalGallery);
+                    });
                 alert("Photo ajoutée avec succès !");
             })
             .catch(error => {
