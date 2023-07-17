@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function displayProjectsInModal(projects, gallery) {
         gallery.innerHTML = '';
     
-        projects.forEach((project, index) => {
+        projects.forEach((project, ) => {
             const figure = document.createElement('figure');
             figure.draggable = true;
             figure.dataset.id = project.id;
@@ -309,12 +309,20 @@ document.addEventListener("DOMContentLoaded", function() {
     
             gallery.appendChild(figure);
         });
+
     
-        const deleteIcons = gallery.querySelectorAll(".trash-can");
+        const deleteIcons = document.querySelectorAll(".trash-can");
         deleteIcons.forEach(trashCan => {
             const figure = trashCan.parentNode;
             const photoId = figure.dataset.id;
             trashCan.value = photoId;
+            trashCan.addEventListener("click", () => {
+                const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+                if (confirmDelete) {
+                    deletePhoto(photoId);
+                }
+            })
+            
         });
     }
     
@@ -332,6 +340,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const gallery = document.querySelector(".modal-galery");
         gallery.insertBefore(draggedItem, this.nextSibling);
     }
+
 
     function getCategoryId(categoryName) {
         const categories = [
@@ -396,6 +405,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     .then(data => {
                         displayProjectsInModal(data, modalGallery);
                     });
+                fetch('http://localhost:5678/api/works')
+                    .then(response => response.json())
+                    .then(data => {
+                        displayProjects(data);
+                    });        
                 alert("Photo ajoutée avec succès !");
             })
             .catch(error => {
@@ -403,4 +417,39 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error(error);
             });
     }
+
+    function deletePhoto(photoId) {
+        fetch(`http://localhost:5678/api/works/${photoId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (response.status == 204) {
+                    console.log("Suppression du Projet");
+                    // Recharger la galerie dans la modale
+                    fetch('http://localhost:5678/api/works')
+                        .then(response => response.json())
+                        .then(data => {
+                            displayProjectsInModal(data, modalGallery);
+                        });
+                    // Recharger la galerie sur la page
+                    fetch('http://localhost:5678/api/works')
+                        .then(response => response.json())
+                        .then(data => {
+                            displayProjects(data);
+                        });
+                } else {
+                    alert("Erreur dans la suppression du projet");
+                }
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    }
+    
+    
 });
