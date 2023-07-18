@@ -451,5 +451,24 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
     
-    
+    function deleteGallery() {
+        const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer toute la galerie ?");
+        if (confirmDelete) {
+          // Supprimer tous les projets de la galerie
+          const gallery = document.querySelector('.gallery');
+          gallery.innerHTML = '';
+      
+          // Appeler la fonction deletePhoto pour supprimer chaque projet individuellement
+          allProjects.forEach(project => {
+            deletePhoto(project.id);
+          });
+      
+          // Réinitialiser la variable allProjects
+          allProjects = [];
+        }
+      }
+      
+      // Ajouter un gestionnaire d'événement au bouton de suppression de la galerie
+      deleteButton.addEventListener("click", deleteGallery);
+      
 });
