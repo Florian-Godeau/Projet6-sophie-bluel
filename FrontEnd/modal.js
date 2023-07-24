@@ -169,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
     checkConditions();
     });
 
+    // Fonction pour regarder si les conditions d'ajout de la photo sont bonnes
     function checkConditions() {
     if (isImageSelected && isTitleEntered && isCategorySelected) {
         validateButton.style.backgroundColor = '#1D6154';
@@ -203,6 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // Fonction pour afficher la modale d'ajout de projet
     function switchToAddMode() {
         const titleElement = document.querySelector("h3");
         titleElement.textContent = "Ajout photo";
@@ -217,7 +219,8 @@ document.addEventListener("DOMContentLoaded", function() {
         addBtnPhoto.style.display = "block"; 
         addCondition.style.display = "block";
     }
-    
+   
+    // Fonction pour afficher la modale de base avec la galerie de projet
     function switchToGalleryMode() {
         const titleElement = document.querySelector("h3");
         const img = document.querySelector(".miniature-photo");
@@ -259,6 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
             checkConditions();
         }
         
+        // Fonction pour fermer et réinitialiser la modale une fois fermée 
         function closeModal() {
             modal.style.display = "none";
             switchToGalleryMode();
@@ -274,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     
-    
+    // Fonction pour afficher les projets dans la modale et les rendre draggable
     function displayProjectsInModal(projects, gallery) {
         gallery.innerHTML = '';
     
@@ -310,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function() {
             gallery.appendChild(figure);
         });
 
-    
+        // Donner la valeur de l'id des projets aux icônes poubelles associé et supprimer le projet au clic  
         const deleteIcons = document.querySelectorAll(".trash-can");
         deleteIcons.forEach(trashCan => {
             const figure = trashCan.parentNode;
@@ -362,6 +366,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return category ? category.id : null;
     }
     
+    // Fonction pour upload un projet
     function uploadPhoto() {
         const file = document.getElementById("inputPhoto").files[0];
         const title = document.getElementById("photoTitle").value;
@@ -418,6 +423,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
+    // Fonction pour supprimer un projet
     function deletePhoto(photoId) {
         fetch(`http://localhost:5678/api/works/${photoId}`, {
             method: "DELETE",
@@ -451,6 +457,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
     
+    // Fonction pour supprimer toute la galerie de projets
     function deleteGallery() {
         const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer toute la galerie ?");
         if (confirmDelete) {
