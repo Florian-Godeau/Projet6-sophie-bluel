@@ -25,7 +25,7 @@ const createModalGallery = (projects) => {
             </select>
         </form>
         <div class="modal-galery">
-          ${projects.map((project) => /*html*/ `
+          ${projects.map((project) => /*html*/`
             <figure data-id="${project.id}">
               <img src="${project.imageUrl}" alt="${project.title}" class="modal-galery-img"/>
               <figcaption>éditer</figcaption>
@@ -116,6 +116,7 @@ function displayProjectsInModal() {
 			modalForm.style.display = "none";
 			validateButton.style.display = "none";
 			addButton.style.display = "block";
+			errorMessage.style.display = "none";
 			// Supprimer l'image sélectionnée
 			if (img) {
 				img.parentNode.removeChild(img);
