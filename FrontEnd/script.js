@@ -7,52 +7,76 @@ fetch('http://localhost:5678/api/works')
         displayProjects(data);
     });
 
-function displayProjects(projects) {
-    const gallery = document.querySelector('.gallery');
-    gallery.innerHTML = '';
-
-    projects.forEach(project => {
-        const figure = document.createElement('figure');
-
-        const img = document.createElement('img');
-        img.src = project.imageUrl;
-        img.alt = project.title;
-
-        const figcaption = document.createElement('figcaption');
-        figcaption.textContent = project.title;
-
-        figure.appendChild(img);
-        figure.appendChild(figcaption);
-
-        gallery.appendChild(figure);
-    });
-
-    if (window.location.hash === '#contact') {
-        setTimeout(function() {
-            const contactElement = document.getElementById('contact');
-            contactElement.scrollIntoView();
-        }, 100);
+    function displayProjects(projects) {
+        const createGallery = () => {
+            const gallery = /*html*/`
+                <div class="gallery">
+                    ${projects.map((project) => /*html*/ `
+                        <figure>
+                            <img src="${project.imageUrl}" alt="${project.title}" />
+                            <figcaption>${project.title}</figcaption>
+                        </figure>    
+                    `).join('')}
+                </div>
+            `;
+    
+            // Cherche la section avec l'id "portfolio"
+            const portfolioSection = document.getElementById('portfolio');
+    
+            // Vérifie s'il y a déjà une galerie, si oui, la remplace
+            const existingGallery = document.querySelector('.gallery');
+            if (existingGallery) {
+                existingGallery.outerHTML = gallery;
+            } else {
+                // Sinon, ajoute la nouvelle galerie à l'intérieur de la section "portfolio"
+                portfolioSection.insertAdjacentHTML('beforeend', gallery);
+            }
+        };
+    
+        createGallery(); // Appel de la fonction createGallery pour créer la galerie d'images
+    
+        if (window.location.hash === '#contact') {
+            setTimeout(function() {
+                const contactElement = document.getElementById('contact');
+                contactElement.scrollIntoView();
+            }, 100);
+        }
     }
-}
 
-fetch('http://localhost:5678/api/categories')
+    fetch('http://localhost:5678/api/categories')
     .then(response => response.json())
     .then(categories => {
         const filterButtons = document.querySelector('.filter-buttons');
 
-        const allButton = document.createElement('button');
-        allButton.textContent = "Tous";
-        allButton.classList.add('filter-selected');
-        allButton.classList.add('filter');
-        allButton.addEventListener('click', () => filterProjects(null, allButton));
-        filterButtons.appendChild(allButton);
+        // Utilise map pour générer la structure HTML pour chaque catégorie
+        const buttonsHtml = categories.map(category => {
+            return /*html*/`
+                <button class="filter">${category.name}</button>
+            `;
+        }).join('');
 
-        categories.forEach(category => {
-            const button = document.createElement('button');
-            button.textContent = category.name;
-            button.classList.add('filter');
-            button.addEventListener('click', () => filterProjects(category.id, button));
-            filterButtons.appendChild(button);
+        // Ajoute le bouton "Tous" en tant que premier bouton
+        const allButtonHtml = /*html*/`
+            <button class="filter filter-selected">Tous</button>
+        `;
+
+        // Crée la structure complète en combinant le bouton "Tous" avec les boutons de catégories
+        const filterButtonsHtml = allButtonHtml + buttonsHtml;
+
+        // Utilise innerHTML pour mettre à jour le contenu de la div filter-buttons
+        filterButtons.innerHTML = filterButtonsHtml;
+
+        // Récupère tous les boutons de filtre
+        const buttons = document.querySelectorAll('.filter-buttons button');
+
+        // Ajoute un event listener à chaque bouton de filtre
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Si le bouton "Tous" est cliqué (avec la classe "filter-selected"), on appelle "filterProjects" avec categoryId à null.
+                // Sinon, on recherche l'id de la catégorie associée et on appelle "filterProjects" avec cet id pour filtrer les projets par catégorie.
+                const categoryId = button.classList.contains('filter-selected') ? null : categories.find(category => category.name === button.textContent)?.id;
+                filterProjects(categoryId, button);
+            });
         });
     });
 
@@ -72,7 +96,7 @@ function setSelectedFilter(selectedButton) {
 
 function logged() {
     const edit = document.querySelector(".edit");
-    const filterButtons = document.querySelector('.filter-buttons');
+    const filterButtons = document.querySelector(".filter-buttons");
     const header = document.querySelector("header");
     const editButtons = document.querySelectorAll(".edit-button");
 

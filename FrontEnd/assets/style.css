@@ -561,6 +561,10 @@ figure:hover .fa-arrows-up-down-left-right {
 	margin-bottom: 19px;
 }
 
+#inputPhoto {
+	display: none;
+}
+
 .modal-form {
 	text-align: left;
 	display: none;
