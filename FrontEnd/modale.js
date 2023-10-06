@@ -2,36 +2,36 @@
 const createModalGallery = (projects) => {
 	const modalContentcrea = document.createElement('div');
 	modalContentcrea.innerHTML = /*html*/ `
-      <div class="modal-content">
-        <i class="fa-solid fa-xmark close-modal"></i>
-        <i class="fa-solid fa-arrow-left-long"></i>
-        <h3>Galerie photo</h3>
-        <div class="modal-picture">
-            <i class="fa-regular fa-image img-add-photo"></i>
-            <button class="btn-add-photo">+ Ajouter photo</button>
-            <p class="add-photo-condition">jpg, png : 4mo max</p>
-            <p class="add-photo-error">Cette image ne respecte pas les conditions</p>
-            <input type="file" accept="image/png, image/jpeg" id="inputPhoto">
-        </div>
-        <form class="modal-form" method="post" action="#">
-            <label for="photoTitle">Titre</label>
-            <input type="text" name="photoTitle" id="photoTitle" required="true">
-            <label for="photoCategory">Catégorie</label>
-            <select name="photoCategory" id="photoCategory">
-                <option value="null"></option>
-                <option value="Objets">Objets</option>
-                <option value="Appartements">Appartements</option>
-                <option value="Hotels & restaurants">Hotels & restaurants</option>
-            </select>
-        </form>
-        <div class="modal-galery">
-          ${projects.map((project) => /*html*/`
-            <figure data-id="${project.id}">
-              <img src="${project.imageUrl}" alt="${project.title}" class="modal-galery-img"/>
-              <figcaption>éditer</figcaption>
-              <i class="fa-regular fa-trash-can trash-can"></i>
-              <i class="fa-solid fa-arrows-up-down-left-right arrows"></i>
-            </figure>    
+    	<div class="modal-content">
+			<i class="fa-solid fa-xmark close-modal"></i>
+			<i class="fa-solid fa-arrow-left-long"></i>
+			<h3>Galerie photo</h3>
+			<div class="modal-picture">
+				<i class="fa-regular fa-image img-add-photo"></i>
+				<button class="btn-add-photo">+ Ajouter photo</button>
+				<p class="add-photo-condition">jpg, png : 4mo max</p>
+				<p class="add-photo-error">Cette image ne respecte pas les conditions</p>
+				<input type="file" accept="image/png, image/jpeg" id="inputPhoto">
+       		</div>
+        	<form class="modal-form" method="post" action="#">
+				<label for="photoTitle">Titre</label>
+				<input type="text" name="photoTitle" id="photoTitle" required="true">
+				<label for="photoCategory">Catégorie</label>
+				<select name="photoCategory" id="photoCategory">
+					<option value="null"></option>
+					<option value="Objets">Objets</option>
+					<option value="Appartements">Appartements</option>
+					<option value="Hotels & restaurants">Hotels & restaurants</option>
+				</select>
+        	</form>
+        	<div class="modal-galery">
+          	${projects.map((project) => /*html*/`
+				<figure data-id="${project.id}">
+					<img src="${project.imageUrl}" alt="${project.title}" class="modal-galery-img"/>
+					<figcaption>éditer</figcaption>
+					<i class="fa-regular fa-trash-can trash-can"></i>
+					<i class="fa-solid fa-arrows-up-down-left-right arrows"></i>
+				</figure>    
           `).join('')}
         </div>
         <div class="modal-addPhoto"></div>
@@ -39,7 +39,6 @@ const createModalGallery = (projects) => {
         <button class="btn-add-picture">Ajouter une photo</button>
         <button class="btn-delete-gallery">Supprimer la galerie</button>
         <button class="btn-validate">Valider</button>
-      </div>
     `;
 	return modalContentcrea.innerHTML;
 };
